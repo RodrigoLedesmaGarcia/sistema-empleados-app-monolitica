@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Empleado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<br>
+<h2 class="text-center" >Alta de Empleado(a)</h2>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="text-center mb-0" >Alta de empleado</h5>
+            </div>
+            <div class="card-body">
+
+                <form th:action="@{/employees/nuevo}" th:object="${employee}" method="post" class="needs-validation" novalidate>
+
+                    <!-- nombre -->
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" th:field="*{firstName}" required minlength="2" maxlength="70">
+                        <div class="invalid-feedback" >Por favor ingrese un nombre valido</div>
+                        <div class="text-danger small" th:errors="*{firstName}" ></div>
+                    </div>
+
+                    <!-- apellido -->
+                    <div class="mb-3">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" class="form-control" th:field="*{lastName}" required minlength="2" maxlength="70">
+                        <div class="invalid-feedback" >Por favor ingrese un apellido valido</div>
+                        <div class="text-danger small" th:errors="*{firstName}"></div>
+                    </div>
+
+                    <!-- fechas -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha nacimiento</label>
+                            <input type="date" class="form-control" th:field="*{birthDate}" required>
+                            <div class="invalid-feedback">Por favor seleccione una fecha</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Fecha contratacion</label>
+                            <input type="date" class="form-control" th:field="*{hireDate}" readonly>
+                            <div class="invalid-feedback">Por favor seleccione una fecha</div>
+                        </div>
+                    </div>
+
+                    <!-- genero -->
+                    <div class="mb-3">
+                        <!--<label class="text-danger">Ya sabemos que estanos en el 2026, pero seleccione su genero de nacimiento</label> -->
+                        <br>
+                        <label class="form-label">Género *</label>
+                        <select class="form-select" th:field="*{gender}" required>
+                            <option value="" disabled selected>--Seleccione--</option>
+                            <option value="M" >Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                        <div class="invalid-feedback" >Por favor seleccione un genero</div>
+                    </div>
+
+                    <!-- departamento -->
+                    <div class="mb-3">
+                        <label class="form-label">Departamento</label>
+                        <select class="form-select" th:field="*{deptNo}">
+                            <option value="" selected disabled>--seleccione--</option>
+                            <option value="d001">Marketing</option>
+                            <option value="d002">Finanzas</option>
+                            <option value="d003">Recursos humanos</option>
+                            <option value="d004">Produccion</option>
+                            <option value="d005">Desarrollo</option>
+                            <option value="d006">Calidad</option>
+                            <option value="d007">Ventas</option>
+                            <option value="d008">Investigacion</option>
+                            <option value="d009">Servicio al Cliente</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor seleccione un departamento
+                        </div>
+                    </div>
+
+
+                    <!-- fechas de inicio y actual -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Desde</label>
+                            <input type="date" class="form-control" th:field="*{fromDate}" required>
+                            <div class="invalid-feeeback">
+                                Por favor ingrese una fecha
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hasta</label>
+                            <input type="date" class="form-control" th:field="*{toDate}">
+                            <small>Dejar vacio si es actual</small>
+                        </div>
+                    </div>
+
+                    <!-- botones -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-outline-secondary" >Limpiar</button>
+                        <button type="submit" command="btn btn-primary" >Guardar</button>
+                    </div>
+
+                </form>
+
+                <!-- mensaje de exito alternativo -->
+                <div th:if="${param.ok}" class="alert alert-success mt-3">
+                    <i class="bi bi-check-circle" ></i>Empleado creado correctamente
+                </div>
+
+                <div th:if="${param.error}" class="alert alert-danger my-3">
+                    <i class="bi bi-exclamation-trangle" ></i> Error al crear el empleado
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-cetered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" >Empleado creado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" ></button>
+            </div>
+
+            <div class="modal-body">
+                <p>Elpleado creado con exito</p>
+                <div class="text-center">
+                    <a th:href="@{/employees}" class="btn btn-outline-success me-2">
+                        Regresar
+                    </a>
+                    <a th:href="@{/employees/nuevo}" class="btn btn-success">Crear otro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const  urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.has('ok')) {
+            const  modalEl = document.getElementById('successModal');
+            const  modal = new bootstrap.Modal(modalEl);
+            modal.show();
+
+            modalEl.addEventListener('hidden.bs.model', () => {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }, {once: true});
+        }
+    })
+</script>
+</html>

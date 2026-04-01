@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Empleados</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Reporte de empleados</h2>
+                <a th:href="@{/employee/nuevo}" class="btn btn-success btn-sm">Nuevo empleado</a>
+            </div>
+
+            <form method="post" class="row g-2 mb-4" th:action="@{/employee/buscar}">
+                <div class="col-12 col-md-3">
+                    <label class="form-label">N° de empleado</label>
+                    <input type="number" name="empNo" class="form-control" th:value="${empNo}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="firstName" class="form-control" th:value="${firstName}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Apellido</label>
+                    <input type="text" name="lastName" class="form-control" th:value="${lastName}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Género</label>
+                    <select name="gender" class="form-select">
+                        <option value="" th:selected="${gender == null || gender == ''}">Todos</option>
+                        <option value="M" th:selected="${gender == 'M'}">Hombre</option>
+                        <option value="F" th:selected="${gender == 'F'}">Mujer</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Departamento</label>
+                    <input type="text" name="deptNo" class="form-control" placeholder="Ejemplo: d001" th:value="${deptNo}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Contratación</label>
+                    <input type="date" name="hireDate" class="form-control" th:value="${hireDate}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Nacimiento</label>
+                    <input type="date" name="birthDate" class="form-control" th:value="${birthDate}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Desde</label>
+                    <input type="date" name="fromDate" class="form-control" th:value="${fromDate}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Hasta</label>
+                    <input type="date" name="toDate" class="form-control" th:value="${toDate}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Página</label>
+                    <input type="number" name="page" class="form-control" th:value="${page}">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label">Tamaño</label>
+                    <input type="number" name="size" class="form-control" th:value="${size}">
+                </div>
+
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <a th:href="@{/employee/inicio}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+
+            <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+            <div class="alert alert-success" th:if="${param.editado}">Empleado editado correctamente.</div>
+            <div class="alert alert-warning" th:if="${param.eliminado}">Empleado eliminado correctamente.</div>
+
+            <div th:if="${results != null}">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="text-muted small">
+                        Total <span th:text="${results.totalElements}"></span>
+                        | Página <span th:text="${results.number + 1}"></span>
+                        de <span th:text="${results.totalPages}"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <form method="post" th:action="@{/employee/buscar}" class="m-0">
+                            <input type="hidden" name="empNo" th:value="${empNo}">
+                            <input type="hidden" name="birthDate" th:value="${birthDate}">
+                            <input type="hidden" name="firstName" th:value="${firstName}">
+                            <input type="hidden" name="lastName" th:value="${lastName}">
+                            <input type="hidden" name="gender" th:value="${gender}">
+                            <input type="hidden" name="hireDate" th:value="${hireDate}">
+                            <input type="hidden" name="deptNo" th:value="${deptNo}">
+                            <input type="hidden" name="fromDate" th:value="${fromDate}">
+                            <input type="hidden" name="toDate" th:value="${toDate}">
+                            <input type="hidden" name="size" th:value="${size}">
+                            <input type="hidden" name="page" th:value="${results.number > 0 ? results.number - 1 : 0}">
+                            <button class="btn btn-outline-primary btn-sm" type="submit" th:disabled="${results.first}">
+                                Anterior
+                            </button>
+                        </form>
+
+                        <form method="post" th:action="@{/employee/buscar}" class="m-0">
+                            <input type="hidden" name="empNo" th:value="${empNo}">
+                            <input type="hidden" name="birthDate" th:value="${birthDate}">
+                            <input type="hidden" name="firstName" th:value="${firstName}">
+                            <input type="hidden" name="lastName" th:value="${lastName}">
+                            <input type="hidden" name="gender" th:value="${gender}">
+                            <input type="hidden" name="hireDate" th:value="${hireDate}">
+                            <input type="hidden" name="deptNo" th:value="${deptNo}">
+                            <input type="hidden" name="fromDate" th:value="${fromDate}">
+                            <input type="hidden" name="toDate" th:value="${toDate}">
+                            <input type="hidden" name="size" th:value="${size}">
+                            <input type="hidden" name="page" th:value="${results.number + 1}">
+                            <button class="btn btn-outline-primary btn-sm" type="submit" th:disabled="${results.last}">
+                                Siguiente
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Emp No</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Género</th>
+                            <th>Nacimiento</th>
+                            <th>Contratación</th>
+                            <th>Departamento</th>
+                            <th>Desde</th>
+                            <th>Hasta</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${results.content}">
+                            <td th:text="${item.empNo}"></td>
+                            <td th:text="${item.firstName}"></td>
+                            <td th:text="${item.lastName}"></td>
+                            <td th:text="${item.gender}"></td>
+                            <td th:text="${item.birthDate}"></td>
+                            <td th:text="${item.hireDate}"></td>
+                            <td th:text="${item.deptNo}"></td>
+                            <td th:text="${item.fromDate}"></td>
+                            <td th:text="${item.toDate}"></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a th:href="@{/employee/editar/{empNo}(empNo=${item.empNo})}"
+                                       class="btn btn-warning btn-sm">
+                                        Editar
+                                    </a>
+
+                                    <form th:action="@{/employee/eliminar/{empNo}(empNo=${item.empNo})}"
+                                          method="post"
+                                          class="m-0"
+                                          onsubmit="return confirm('¿Seguro que deseas eliminar este empleado?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

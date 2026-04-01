@@ -1,4 +1,4 @@
-package com.oracle.www.sistemaempleadosappmonolitica.controller;
+package com.oracle.www.sistemaempleadosappmonolitica.controllers;
 
 import com.oracle.www.sistemaempleadosappmonolitica.entities.EmployeeCreateAndUpdateRequest;
 import com.oracle.www.sistemaempleadosappmonolitica.service.EmployeeServiceImpl;
@@ -35,7 +35,7 @@ public class EmployeeController {
 
 
     // --- INICIO ---
-    @GetMapping("/inicio")
+    @GetMapping({"/inicio", "/home"})
     public String view(){
         return "employees";
     }
@@ -97,13 +97,13 @@ public class EmployeeController {
         if(!model.containsAttribute("employee")){
             model.addAttribute("employee", new EmployeeCreateAndUpdateRequest());
         }
-        return "new-employees";
+        return "new-employee";
     }
     @PostMapping("/nuevo")
     public String crearEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
 
         if(result.hasErrors()){
-            return "nw-employees";
+            return "new-employee";
         }
 
         service.crearEmpleado(request);
@@ -145,7 +145,7 @@ public class EmployeeController {
     public String editarEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
 
         if(result.hasErrors()){
-            return "edit-employee";
+            return "edit-delete-employee";
         }
 
         service.editarEmpleado(request);
