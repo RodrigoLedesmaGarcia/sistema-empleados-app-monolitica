@@ -10,6 +10,10 @@
 <div class="container py-4">
     <div class="card shadow-sm border-0">
         <div class="card-body">
+            <br>
+            <button class="btn btn-danger btn-sm" th:onclick="|window.location.href='@{/employee/buscar}'|">Volver al Inicio</button>
+            <hr>
+            <br>
             <h2 class="mb-4">Editar empleado</h2>
 
             <form th:action="@{/employee/editar}" th:object="${employee}" method="post">

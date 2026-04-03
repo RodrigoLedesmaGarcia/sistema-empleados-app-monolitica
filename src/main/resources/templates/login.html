@@ -1,39 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d6efd, #6f42c1);
+            min-height: 100vh;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .login-card .card-body {
+            padding: 2rem;
+        }
+
+        .login-title {
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .login-subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+        }
+
+        .btn-login {
+            border-radius: 12px;
+            padding: 0.75rem;
+            font-weight: 600;
+        }
+
+        .login-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #e9f2ff;
+            color: #0d6efd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1rem auto;
+        }
+    </style>
 </head>
-<body class="d-flex aling-items-center  justify-content-center vh-100">
+<body class="d-flex align-items-center justify-content-center">
 
-<div class="card shadow-sm" style="width: 22rem;">
+<div class="card shadow-lg login-card">
     <div class="card-body">
-        <h3 class="card-title text-center" >Login</h3>
+        <div class="text-center mb-4">
+            <div class="login-icon">
+                👤
+            </div>
+            <h2 class="login-title mb-1">Bienvenido</h2>
+            <p class="login-subtitle mb-0">Ingresa tus credenciales para continuar</p>
+        </div>
 
         <div class="alert alert-danger text-center" th:if="${error}" th:text="${error}"></div>
 
-        <form method="post" th:action="@{auth/login}" >
+        <form method="post" th:action="@{/auth/login}">
             <div class="mb-3">
-                <label class="form-label">Usuario</label>
-                <input type="text" name="username" class="form-control" placeholder="usuario" required>
+                <label for="username" class="form-label fw-semibold">Usuario</label>
+                <input id="username"
+                       type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Ingresa tu usuario"
+                       required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input type="password" name="password" class="form-control" placeholder="contraseña" required>
+            <div class="mb-4">
+                <label for="password" class="form-label fw-semibold">Contraseña</label>
+                <input id="password"
+                       type="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Ingresa tu contraseña"
+                       required>
             </div>
 
-            <div class="text-end">
-                <button type="submit" class="bt-btn-primary" >Iniciar Sesión</button>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-login">
+                    Iniciar sesión
+                </button>
             </div>
         </form>
     </div>
-
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 </body>
 </html>
