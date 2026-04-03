@@ -12,6 +12,15 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Compilar proyecto
+        run: mvn clean package -DskipTests
+
       - name: Configurar QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -28,7 +37,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: tuusuario/tu-app
+          images: rodrigoledesma/sistema-empleados-app-monolitica
           tags: |
             type=raw,value=latest
             type=sha
