@@ -9,8 +9,16 @@
 <body>
 <div class="container">
     <h1 class="text-center mb-3">Reporte de empleados</h1>
-
-    <form method="post" class="row g-2 mb-3" th:action="@{/employees/buscar}">
+    <div class="col-md-3">
+        <button class="btn btn-warning btn-sm"
+                th:onclick="|window.location.href='@{/employee/nuevo}'|">
+            Crear empleado
+        </button>
+        <button class="btn btn-danger btn-sm" th:onclick="|window.location.href='@{/employee/editar}'|">Editar / Eliminar empleado</button>
+    </div>
+    <br>
+    <hr>
+    <form method="get" class="row g-2 mb-3" th:action="@{/employee/buscar}">
 
         <!-- numero de emplado -->
         <div class="col-12 col-md-3">
@@ -101,7 +109,7 @@
             <div class="d-flex gap-2">
 
                 <!-- anterior -->
-                <form method="post" th:action="@{/employyes/buscar}" class="m-0">
+                <form method="get" th:action="@{/employye/buscar}" class="m-0">
                     <input type="hidden"  name="empNo"      th:value="${empNo}">
                     <input type="hidden"  name="birthDate"  th:value="${birthDate}">
                     <input type="hidden"  name="firstName"  th:value="${firstName}">
@@ -117,7 +125,7 @@
                 </form>
 
                 <!-- siguiente -->
-                <form method="post" th:action="@{/employees/buscar}" class="m-0">
+                <form method="get" th:action="@{/employee/buscar}" class="m-0">
                     <input type="hidden"  name="empNo"      th:value="${empNo}">
                     <input type="hidden"  name="birthDate"  th:value="${birthDate}">
                     <input type="hidden"  name="firstName"  th:value="${firstName}">
@@ -147,6 +155,7 @@
                     <th>Departamento</th>
                     <th>From</th>
                     <th>To</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -160,6 +169,27 @@
                     <td th:text="${item.deptNo}" ></td>
                     <td th:text="${item.fromDate}" ></td>
                     <td th:text="${item.toDate}" ></td>
+                    <td class="text-center">
+                        <div class="d-flex gap-2 justify-content-center">
+
+                            <!-- EDITAR -->
+                            <a th:href="@{/employee/editar/{empNo}(empNo=${item.empNo})}"
+                               class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+
+                            <!-- ELIMINAR -->
+                            <form th:action="@{/employee/eliminar/{empNo}(empNo=${item.empNo})}"
+                                  method="post"
+                                  class="m-0"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar este empleado?');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Eliminar
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -9,7 +9,6 @@ public class SistemaEmpleadosAppMonoliticaApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SistemaEmpleadosAppMonoliticaApplication.class, args);
-        System.out.println(new BCryptPasswordEncoder().encode("Rodrigo12345"));
+        //System.out.println(new BCryptPasswordEncoder().encode("Rodrigo12345"));
     }
-
 }

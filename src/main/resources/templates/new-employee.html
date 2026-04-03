@@ -18,7 +18,7 @@
             </div>
             <div class="card-body">
 
-                <form th:action="@{/employees/nuevo}" th:object="${employee}" method="post" class="needs-validation" novalidate>
+                <form th:action="@{/employee/nuevo}" th:object="${employee}" method="post" class="needs-validation" novalidate>
 
                     <!-- nombre -->
                     <div class="mb-3">
@@ -46,7 +46,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Fecha contratacion</label>
-                            <input type="date" class="form-control" th:field="*{hireDate}" readonly>
+                            <input type="date" class="form-control" th:field="*{hireDate}" required>
                             <div class="invalid-feedback">Por favor seleccione una fecha</div>
                         </div>
                     </div>
@@ -135,10 +135,10 @@
             <div class="modal-body">
                 <p>Elpleado creado con exito</p>
                 <div class="text-center">
-                    <a th:href="@{/employees}" class="btn btn-outline-success me-2">
+                    <a th:href="@{/employee/nuevo}" class="btn btn-outline-success me-2">
                         Regresar
                     </a>
-                    <a th:href="@{/employees/nuevo}" class="btn btn-success">Crear otro</a>
+                    <a th:href="@{/employee/nuevo}" class="btn btn-success">Crear otro</a>
                 </div>
             </div>
         </div>

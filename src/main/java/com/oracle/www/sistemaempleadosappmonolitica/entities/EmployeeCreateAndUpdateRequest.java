@@ -4,19 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 @Table(name = "employees")
 public class EmployeeCreateAndUpdateRequest {
 
-
-    @NotNull(message = "el campo de N° de empleado no puede estar vacio")
     @Column(name = "emp_no", nullable = false)
     private Integer empNo;
 
     @NotNull(message = "el campo de no puede estar vacio")
     @Column(name = "birth_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
     @NotBlank(message = "el campo de nombre no puede estar vacio")
@@ -33,6 +33,7 @@ public class EmployeeCreateAndUpdateRequest {
 
     @NotNull(message = "el campo de fecha de contraracion no puede estar vacio")
     @Column(name = "hire_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate hireDate;
 
     @NotNull(message = "el campo de deparyamento no puede estar vacio")
@@ -41,9 +42,11 @@ public class EmployeeCreateAndUpdateRequest {
 
     @NotNull(message = "el campo de inicio no puede estar vacio")
     @Column(name = "from_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fromDate;
 
     @Column(name = "to_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate toDate;
 
     public EmployeeCreateAndUpdateRequest() {

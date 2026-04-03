@@ -12,7 +12,7 @@ public class DeptEmpId implements Serializable {
     @Column(name = "emp_no")
     private Integer empNo;
 
-    @Column(name = "detp_no")
+    @Column(name = "dept_no")
     private String deptNo;
 
     public DeptEmpId(){}

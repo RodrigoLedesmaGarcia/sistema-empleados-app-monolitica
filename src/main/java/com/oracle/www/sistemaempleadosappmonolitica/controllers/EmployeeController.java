@@ -1,5 +1,7 @@
 package com.oracle.www.sistemaempleadosappmonolitica.controllers;
 
+import com.oracle.www.sistemaempleadosappmonolitica.entities.DeptEmp;
+import com.oracle.www.sistemaempleadosappmonolitica.entities.Employee;
 import com.oracle.www.sistemaempleadosappmonolitica.entities.EmployeeCreateAndUpdateRequest;
 import com.oracle.www.sistemaempleadosappmonolitica.service.EmployeeServiceImpl;
 import com.oracle.www.sistemaempleadosappmonolitica.utils.EmployeeProjection;
@@ -43,7 +45,7 @@ public class EmployeeController {
 
 
     // ----- BUSCAR -----
-    @PostMapping("/buscar")
+    @GetMapping("/buscar")
     public String buscar(
             @RequestParam(required = false) Integer empNo,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate birthDate,
@@ -113,46 +115,42 @@ public class EmployeeController {
 
     // ----- EDITAR EMPLEADO YA EXISTENTE -----
     @GetMapping("/editar/{empNo}")
-    public String fromEditar(@PathVariable Integer empNo, Model model){
+    public String mostrarFormularioEditar(@PathVariable Integer empNo, Model model) {
 
-        Page<EmployeeProjection> page = service.findAllWithFilters(
-                empNo, null, null, null, null, null, null,null,null, 0, 1
-        );
-
-        if(page.isEmpty()){
-            return "redirect:/employee/inicio=noexiste";
-        }
-
-        EmployeeProjection emp = page.getContent().get(0);
+        Employee employee = service.findById(empNo)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado: " + empNo));
 
         EmployeeCreateAndUpdateRequest request = new EmployeeCreateAndUpdateRequest();
-        request.setEmpNo(emp.getEmpNo());
-        request.setBirthDate(emp.getBirthDate());
-        request.setFirstName(emp.getFirstName());
-        request.setLastName(emp.getLastName());
-        request.setGender(emp.getGender());
-        request.setHireDate(emp.getHireDate());
-        request.setDeptNo(emp.getDeptNo());
-        request.setFromDate(emp.getFromDate());
-        request.setToDate(emp.getToDate());
+        request.setEmpNo(employee.getEmpNo());
+        request.setBirthDate(employee.getBirthDate());
+        request.setFirstName(employee.getFirstName());
+        request.setLastName(employee.getLastName());
+        request.setGender(employee.getGender());
+        request.setHireDate(employee.getHireDate());
+
+        if (employee.getDepartaments() != null && !employee.getDepartaments().isEmpty()) {
+            DeptEmp deptEmp = employee.getDepartaments().get(0);
+            request.setDeptNo(deptEmp.getId().getDeptNo());
+            request.setFromDate(deptEmp.getFromDate());
+            request.setToDate(deptEmp.getToDate());
+        }
 
         model.addAttribute("employee", request);
-
-        return "edit-delete-employee";
+        return "form-editar";
     }
 
     @PostMapping("/editar")
-    public String editarEmpleado(@Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request, BindingResult result){
+    public String editarEmpleado(
+            @Valid @ModelAttribute("employee") EmployeeCreateAndUpdateRequest request,
+            BindingResult result) {
 
-        if(result.hasErrors()){
-            return "edit-delete-employee";
+        if (result.hasErrors()) {
+            return "form-editar";
         }
 
         service.editarEmpleado(request);
-        return "redirect:/employee/inicio?editado";
+        return "redirect:/employee/inicio?editado=true";
     }
-
-
 
     // ----- ELIMINAR EMPLEADO -----
     @PostMapping("/eliminar/{empNo}")

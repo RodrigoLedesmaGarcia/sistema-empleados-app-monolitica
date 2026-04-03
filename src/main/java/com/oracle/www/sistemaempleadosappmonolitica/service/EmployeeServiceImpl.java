@@ -4,27 +4,38 @@ import com.oracle.www.sistemaempleadosappmonolitica.entities.DeptEmp;
 import com.oracle.www.sistemaempleadosappmonolitica.entities.DeptEmpId;
 import com.oracle.www.sistemaempleadosappmonolitica.entities.Employee;
 import com.oracle.www.sistemaempleadosappmonolitica.entities.EmployeeCreateAndUpdateRequest;
+import com.oracle.www.sistemaempleadosappmonolitica.repository.DeptEmpRepository;
 import com.oracle.www.sistemaempleadosappmonolitica.repository.EmployeeMonolithRepository;
+import com.oracle.www.sistemaempleadosappmonolitica.repository.EmployeeRepository;
 import com.oracle.www.sistemaempleadosappmonolitica.utils.EmployeeProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeMonolithRepository repository;
 
-    public EmployeeServiceImpl(EmployeeMonolithRepository repository) {
+    private final EmployeeRepository employeeRepository;
+
+    private final DeptEmpRepository deptEmpRepository;
+
+    public EmployeeServiceImpl(EmployeeMonolithRepository repository, EmployeeRepository employeeRepository, DeptEmpRepository deptEmpRepository) {
         this.repository = repository;
+        this.employeeRepository = employeeRepository;
+        this.deptEmpRepository = deptEmpRepository;
     }
 
     private String quitarEspacios(String string){
         return (string == null) ? null : string.trim();
     }
+
 
     /*
     Buscar con filtros
@@ -46,6 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 pageable
         );
     }
+
 
     /*
     crear empleado nuevo
@@ -77,6 +89,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     /*
     editar empleado ya existente
      */
+
+    @Override
+    public Optional<Employee> findById(Integer empNo) {
+        return repository.findById(empNo);
+    }
+
+
     @Override
     public void editarEmpleado(EmployeeCreateAndUpdateRequest request) {
 
@@ -114,17 +133,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     eliminar empleado
      */
     @Override
+    @Transactional
     public void eliminarEmpleado(Integer empNo) {
-        Employee employee = repository.findById(empNo)
-                .orElseThrow( () -> new RuntimeException(
-                        "Empleado no encontrado: " + empNo)
-        );
 
-        if(employee.getDepartaments() != null){
-            employee.getDepartaments().clear();
+        if (!repository.existsById(empNo)) {
+            throw new RuntimeException("Empleado no encontrado: " + empNo);
         }
 
-        repository.delete(employee);
+        // 1. eliminar relaciones (tabla dept_emp)
+        deptEmpRepository.deleteByEmpNo(empNo);
 
+        // 2. eliminar empleado
+        repository.deleteById(empNo);
     }
 }

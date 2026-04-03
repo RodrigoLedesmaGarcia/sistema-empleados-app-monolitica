@@ -1,10 +1,12 @@
 package com.oracle.www.sistemaempleadosappmonolitica.service;
 
+import com.oracle.www.sistemaempleadosappmonolitica.entities.Employee;
 import com.oracle.www.sistemaempleadosappmonolitica.entities.EmployeeCreateAndUpdateRequest;
 import com.oracle.www.sistemaempleadosappmonolitica.utils.EmployeeProjection;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -21,6 +23,9 @@ public interface EmployeeService {
             int page,
             int size
     );
+
+
+    Optional<Employee> findById(Integer empNo);
 
     void crearEmpleado(EmployeeCreateAndUpdateRequest request);
 
